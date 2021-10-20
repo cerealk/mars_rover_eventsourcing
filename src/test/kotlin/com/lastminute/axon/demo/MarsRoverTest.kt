@@ -70,6 +70,15 @@ class MarsRoverTest {
 
     }
 
+    @Test
+    fun `after a rotation the rover move accordingly`(){
+        fixture.given(RoverLandedEvent(Position(1, 2), N))
+            .andGiven(RoverTurnedEvent(W,L))
+            .`when`(MoveForwardCommand("Mars"))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(RoverMovedEvent(Position(0,2), F))
+    }
+
 }
 
 @Aggregate
@@ -96,12 +105,14 @@ class PlanetMap {
 
     @CommandHandler
     fun moveForward(command: MoveForwardCommand) {
-        AggregateLifecycle.apply(RoverMovedEvent(move(F), F))
+        val roverMovedEvent = RoverMovedEvent(move(F), F)
+        AggregateLifecycle.apply(roverMovedEvent)
     }
 
     @CommandHandler
     fun moveBackward(command: MoveBackwardCommand) {
-        AggregateLifecycle.apply(RoverMovedEvent(move(B), B))
+        val roverMovedEvent = RoverMovedEvent(move(B), B)
+        AggregateLifecycle.apply(roverMovedEvent)
     }
 
     private fun move(direction: Direction): Position {
@@ -111,9 +122,9 @@ class PlanetMap {
         }
         return when (currentRoverOrientation) {
             N -> currentRoverPosition.copy(y = currentRoverPosition.y + delta)
-            S -> currentRoverPosition.copy(y = currentRoverPosition.y + delta)
+            S -> currentRoverPosition.copy(y = currentRoverPosition.y - delta)
             E -> currentRoverPosition.copy(x = currentRoverPosition.x + delta)
-            W -> currentRoverPosition.copy(y = currentRoverPosition.x + delta)
+            W -> currentRoverPosition.copy(x = currentRoverPosition.x - delta)
         }
     }
 
@@ -141,6 +152,11 @@ class PlanetMap {
         S -> W
         W -> N
         E -> S
+    }
+
+    @EventHandler
+    fun handleRoverRotation(event: RoverTurnedEvent){
+        currentRoverOrientation = event.newOrientation
     }
 
 }
