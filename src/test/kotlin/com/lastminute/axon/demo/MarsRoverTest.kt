@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 
 class MarsRoverTest {
 
-    private val  fixture: AggregateTestFixture<PlanetMap> = AggregateTestFixture(PlanetMap::class.java)
+    private val  fixture: AggregateTestFixture<Rover> = AggregateTestFixture(Rover::class.java)
 
 
     @Test
@@ -25,7 +25,11 @@ class MarsRoverTest {
         val landingOrientation = N
         val dropLanderCommand = DropLanderCommand("Mars", landingSpot, landingOrientation)
 
-        fixture.`when`(dropLanderCommand).expectSuccessfulHandlerExecution().expectEvents(RoverLandedEvent(landingSpot, landingOrientation))
+        fixture.`when`(dropLanderCommand).expectSuccessfulHandlerExecution().expectEvents(RoverLandedEvent(
+            "Mars",
+            landingSpot,
+            landingOrientation
+        ))
     }
 
     @Test
@@ -33,7 +37,7 @@ class MarsRoverTest {
 
         val newPosition = Position(1,3)
         val direction = F
-        fixture.given(RoverLandedEvent(Position(1, 2), N))
+        fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(MoveForwardCommand("Mars")).
                 expectSuccessfulHandlerExecution().
                 expectEvents(RoverMovedEvent(newPosition, direction))
@@ -44,7 +48,7 @@ class MarsRoverTest {
 
         val newPosition = Position(1,1)
         val direction = B
-        fixture.given(RoverLandedEvent(Position(1, 2), N))
+        fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(MoveBackwardCommand("Mars")).
             expectSuccessfulHandlerExecution().
             expectEvents(RoverMovedEvent(newPosition, direction))
@@ -53,7 +57,7 @@ class MarsRoverTest {
     @Test
     fun `the rover can rotate left`() {
 
-        fixture.given(RoverLandedEvent(Position(1, 2), N))
+        fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(RotateLeftCommand("Mars"))
             .expectSuccessfulHandlerExecution()
             .expectEvents(RoverTurnedEvent(W, L))
@@ -63,7 +67,7 @@ class MarsRoverTest {
     @Test
     fun `the rover can rotate right`() {
 
-        fixture.given(RoverLandedEvent(Position(1, 2), N))
+        fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(RotateRightCommand("Mars"))
             .expectSuccessfulHandlerExecution()
             .expectEvents(RoverTurnedEvent(E, R))
@@ -72,7 +76,7 @@ class MarsRoverTest {
 
     @Test
     fun `after a rotation the rover move accordingly`(){
-        fixture.given(RoverLandedEvent(Position(1, 2), N))
+        fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .andGiven(RoverTurnedEvent(W,L))
             .`when`(MoveForwardCommand("Mars"))
             .expectSuccessfulHandlerExecution()
@@ -82,19 +86,19 @@ class MarsRoverTest {
 }
 
 @Aggregate
-class PlanetMap {
+class Rover {
     constructor() {}
 
 
     @AggregateIdentifier
-    private val planet= "Mars"
+    private val roverName= "Mars"
 
     private lateinit var currentRoverPosition:Position
     private lateinit var currentRoverOrientation: Orientation
 
     @CommandHandler
     constructor(command: DropLanderCommand){
-        AggregateLifecycle.apply(RoverLandedEvent(command.position, command.orientation))
+        AggregateLifecycle.apply(RoverLandedEvent(command.rover, command.position, command.orientation))
     }
 
     @EventHandler
@@ -167,15 +171,14 @@ enum class Orientation {N,S,W,E}
 enum class Direction {F,B}
 enum class Rotation {L, R}
 
-data class DropLanderCommand(@TargetAggregateIdentifier val planet: String, val position: Position, val orientation:Orientation)
-
+data class DropLanderCommand(@TargetAggregateIdentifier val rover: String, val position: Position, val orientation:Orientation)
 data class MoveForwardCommand (@TargetAggregateIdentifier val planet:String)
 data class MoveBackwardCommand (@TargetAggregateIdentifier val Planet:String)
 data class RotateLeftCommand (@TargetAggregateIdentifier val Planet:String)
 data class RotateRightCommand (@TargetAggregateIdentifier val Planet:String)
 
 
-data class RoverLandedEvent(val position: Position, val orientation: Orientation)
+data class RoverLandedEvent(val rover: String, val position: Position, val orientation: Orientation)
 data class RoverMovedEvent(val position: Position, val direction: Direction)
 data class RoverTurnedEvent(val newOrientation: Orientation, val rotation:Rotation )
 
