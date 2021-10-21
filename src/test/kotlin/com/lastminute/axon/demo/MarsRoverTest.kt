@@ -87,11 +87,9 @@ class MarsRoverTest {
 
 @Aggregate
 class Rover {
-    constructor() {}
-
 
     @AggregateIdentifier
-    private val roverName= "Mars"
+    private lateinit var roverName:String
 
     private lateinit var currentRoverPosition:Position
     private lateinit var currentRoverOrientation: Orientation
@@ -103,6 +101,7 @@ class Rover {
 
     @EventHandler
     fun landing(event: RoverLandedEvent){
+        roverName = event.rover
         currentRoverPosition = event.position
         currentRoverOrientation = event.orientation
     }
