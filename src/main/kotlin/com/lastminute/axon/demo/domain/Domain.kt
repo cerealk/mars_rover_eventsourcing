@@ -68,6 +68,19 @@ class Rover {
         AggregateLifecycle.apply(RoverTurnedEvent(newDirection, R))
     }
 
+    @CommandHandler
+    fun movePath(command: FollowPathCommand){
+
+        command.commands.forEach { cmd ->
+            when (cmd){
+                is MoveForwardCommand -> moveForward(cmd)
+                is MoveBackwardCommand -> moveBackward(cmd)
+                is RotateLeftCommand -> rotateLeft(cmd)
+                is RotateRightCommand -> rotateRight(cmd)
+            }
+        }
+    }
+
     private fun rotateLeft(): Orientation = when (currentRoverOrientation){
         N -> W
         S -> E
@@ -87,6 +100,10 @@ class Rover {
         currentRoverOrientation = event.newOrientation
     }
 
+    @EventHandler
+    fun handleRoverMovement(event: RoverMovedEvent){
+        currentRoverPosition = event.position
+    }
 }
 
 data class Position(val x:Int, val y:Int)

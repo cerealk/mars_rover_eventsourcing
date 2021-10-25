@@ -29,12 +29,10 @@ class MarsRoverTest {
     @Test
     fun theRoverCanMoveForward(){
 
-        val newPosition = Position(1,3)
-        val direction = F
         fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(MoveForwardCommand("Mars")).
                 expectSuccessfulHandlerExecution().
-                expectEvents(RoverMovedEvent(newPosition, direction))
+                expectEvents(RoverMovedEvent(Position(1, 3), F))
     }
 
     @Test
@@ -77,6 +75,18 @@ class MarsRoverTest {
             .expectEvents(RoverMovedEvent(Position(0,2), F))
     }
 
+    @Test
+    internal fun `the rover can follow a path`() {
+        fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
+            .`when`(FollowPathCommand("Mars", listOf(MoveForwardCommand("Mars"), MoveForwardCommand("Mars"), RotateRightCommand("Mars"), MoveForwardCommand("Mars") )))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(
+                RoverMovedEvent(Position(1,3), F),
+                RoverMovedEvent(Position(1,4), F),
+                RoverTurnedEvent(E, R),
+                RoverMovedEvent(Position(2,4), F),
+            )
+    }
 }
 
 

@@ -9,3 +9,4 @@ data class MoveForwardCommand (@TargetAggregateIdentifier val rover:String): Com
 data class MoveBackwardCommand (@TargetAggregateIdentifier val rover:String): Command
 data class RotateLeftCommand (@TargetAggregateIdentifier val rover:String): Command
 data class RotateRightCommand (@TargetAggregateIdentifier val rover:String): Command
+data class FollowPathCommand(@TargetAggregateIdentifier val rover: String, val commands: List<Command>)
