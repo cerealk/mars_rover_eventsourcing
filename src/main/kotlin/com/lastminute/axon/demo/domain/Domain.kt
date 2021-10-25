@@ -31,25 +31,7 @@ class Rover {
         currentRoverOrientation = event.orientation
     }
 
-    @CommandHandler
-    fun moveForward(command: MoveForwardCommand) {
-        val newPosition = move(F)
-        if (command.planetMap.probe(newPosition)) {
-            val roverMovedEvent = RoverMovedEvent(newPosition, F)
-            AggregateLifecycle.apply(roverMovedEvent)
-        } else
-            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
-    }
 
-    @CommandHandler
-    fun moveBackward(command: MoveBackwardCommand) {
-        val newPosition = move(B)
-        if (command.planetMap.probe(newPosition)) {
-            AggregateLifecycle.apply(RoverMovedEvent(newPosition, B))
-        } else {
-            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
-        }
-    }
 
     private fun move(direction: Direction): Position {
         val delta = when (direction) {
@@ -65,18 +47,6 @@ class Rover {
     }
 
     @CommandHandler
-    fun rotateLeft(command: RotateLeftCommand) {
-        val newDirection = rotateLeft()
-        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, L))
-    }
-
-    @CommandHandler
-    fun rotateRight(command: RotateRightCommand) {
-        val newDirection = rotateRight()
-        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, R))
-    }
-
-    @CommandHandler
     fun movePath(command: FollowPathCommand) {
 
         command.commands.fold(true) { clearPath, cmd ->
@@ -85,33 +55,17 @@ class Rover {
             else {
                 when (cmd) {
                     is MoveForwardCommand -> {
-                        val newPosition = move(F)
-                        if (cmd.planetMap.probe(newPosition)) {
-                            AggregateLifecycle.apply(RoverMovedEvent(newPosition, F))
-                            true
-                        } else {
-                            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
-                            false
-                        }
+                        moveIfFree(F, command.planetMap)
                     }
                     is MoveBackwardCommand -> {
-                        val newPosition = move(B)
-                        if (cmd.planetMap.probe(newPosition)) {
-                            AggregateLifecycle.apply(RoverMovedEvent(newPosition, B))
-                            true
-                        } else {
-                            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
-                            false
-                        }
+                        moveIfFree(B, command.planetMap)
                     }
                     is RotateLeftCommand -> {
-                        val newDirection = rotateLeft()
-                        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, L))
+                        AggregateLifecycle.apply(RoverTurnedEvent(rotateLeft(), L))
                         true
                     }
                     is RotateRightCommand -> {
-                        val newDirection = rotateRight()
-                        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, R))
+                        AggregateLifecycle.apply(RoverTurnedEvent(rotateRight(), R))
                         true
                     }
                     else -> false
@@ -120,6 +74,21 @@ class Rover {
 
         }
     }
+
+    private fun moveIfFree(
+        direction: Direction,
+        planetMap: PlanetMap
+    ): Boolean {
+        val targetPosition = move(direction)
+        val canMove = planetMap.probe(targetPosition)
+        if (canMove) {
+            AggregateLifecycle.apply(RoverMovedEvent(targetPosition, direction))
+        } else {
+            AggregateLifecycle.apply(ObstacleFoundEvent(targetPosition))
+        }
+        return canMove
+    }
+
 
     private fun rotateLeft(): Orientation = when (currentRoverOrientation) {
         N -> W
