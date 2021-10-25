@@ -87,6 +87,26 @@ class MarsRoverTest {
                 RoverMovedEvent(Position(2,4), F),
             )
     }
+
+    @Test
+    internal fun `the rover cannot overcome obstacles in front of it`() {
+        fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
+            .`when`(FollowPathCommand("Mars", listOf(MoveForwardCommand("Mars", PlanetMap(listOf(Position(1,3)))))))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(ObstacleFoundEvent(Position(1,3)))
+
+    }
+
+    @Test
+    internal fun `the rover cannot overcome obstacles in behind it`() {
+        fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
+            .`when`(FollowPathCommand("Mars", listOf(MoveBackwardCommand("Mars", PlanetMap(listOf(Position(1,1)))))))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(ObstacleFoundEvent(Position(1,1)))
+
+    }
 }
+
+
 
 

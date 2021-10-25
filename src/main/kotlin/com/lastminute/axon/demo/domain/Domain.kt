@@ -14,18 +14,18 @@ import org.axonframework.spring.stereotype.Aggregate
 class Rover {
 
     @AggregateIdentifier
-    private lateinit var roverName:String
+    private lateinit var roverName: String
 
     private lateinit var currentRoverPosition: Position
     private lateinit var currentRoverOrientation: Orientation
 
     @CommandHandler
-    constructor(command: DropLanderCommand){
+    constructor(command: DropLanderCommand) {
         AggregateLifecycle.apply(RoverLandedEvent(command.rover, command.position, command.orientation))
     }
 
     @EventHandler
-    fun landing(event: RoverLandedEvent){
+    fun landing(event: RoverLandedEvent) {
         roverName = event.rover
         currentRoverPosition = event.position
         currentRoverOrientation = event.orientation
@@ -33,14 +33,22 @@ class Rover {
 
     @CommandHandler
     fun moveForward(command: MoveForwardCommand) {
-        val roverMovedEvent = RoverMovedEvent(move(F), F)
-        AggregateLifecycle.apply(roverMovedEvent)
+        val newPosition = move(F)
+        if (command.planetMap.probe(newPosition)) {
+            val roverMovedEvent = RoverMovedEvent(newPosition, F)
+            AggregateLifecycle.apply(roverMovedEvent)
+        } else
+            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
     }
 
     @CommandHandler
     fun moveBackward(command: MoveBackwardCommand) {
-        val roverMovedEvent = RoverMovedEvent(move(B), B)
-        AggregateLifecycle.apply(roverMovedEvent)
+        val newPosition = move(B)
+        if (command.planetMap.probe(newPosition)){
+            AggregateLifecycle.apply(RoverMovedEvent(newPosition, B))
+        } else {
+            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
+        }
     }
 
     private fun move(direction: Direction): Position {
@@ -57,22 +65,22 @@ class Rover {
     }
 
     @CommandHandler
-    fun rotateLeft(command: RotateLeftCommand){
+    fun rotateLeft(command: RotateLeftCommand) {
         val newDirection = rotateLeft()
         AggregateLifecycle.apply(RoverTurnedEvent(newDirection, L))
     }
 
     @CommandHandler
-    fun rotateRight(command: RotateRightCommand){
+    fun rotateRight(command: RotateRightCommand) {
         val newDirection = rotateRight()
         AggregateLifecycle.apply(RoverTurnedEvent(newDirection, R))
     }
 
     @CommandHandler
-    fun movePath(command: FollowPathCommand){
+    fun movePath(command: FollowPathCommand) {
 
         command.commands.forEach { cmd ->
-            when (cmd){
+            when (cmd) {
                 is MoveForwardCommand -> moveForward(cmd)
                 is MoveBackwardCommand -> moveBackward(cmd)
                 is RotateLeftCommand -> rotateLeft(cmd)
@@ -81,14 +89,14 @@ class Rover {
         }
     }
 
-    private fun rotateLeft(): Orientation = when (currentRoverOrientation){
+    private fun rotateLeft(): Orientation = when (currentRoverOrientation) {
         N -> W
         S -> E
         W -> S
         E -> N
     }
 
-    private fun rotateRight(): Orientation = when (currentRoverOrientation){
+    private fun rotateRight(): Orientation = when (currentRoverOrientation) {
         N -> E
         S -> W
         W -> N
@@ -96,17 +104,21 @@ class Rover {
     }
 
     @EventHandler
-    fun handleRoverRotation(event: RoverTurnedEvent){
+    fun handleRoverRotation(event: RoverTurnedEvent) {
         currentRoverOrientation = event.newOrientation
     }
 
     @EventHandler
-    fun handleRoverMovement(event: RoverMovedEvent){
+    fun handleRoverMovement(event: RoverMovedEvent) {
         currentRoverPosition = event.position
     }
 }
 
-data class Position(val x:Int, val y:Int)
-enum class Orientation {N,S,W,E}
-enum class Direction {F,B}
-enum class Rotation {L, R}
+data class PlanetMap(val obstacles: List<Position> = emptyList()) {
+    fun probe(newPosition: Position): Boolean = !obstacles.contains(newPosition)
+}
+
+data class Position(val x: Int, val y: Int)
+enum class Orientation { N, S, W, E }
+enum class Direction { F, B }
+enum class Rotation { L, R }

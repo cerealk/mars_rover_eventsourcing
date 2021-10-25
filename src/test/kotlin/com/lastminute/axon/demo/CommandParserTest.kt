@@ -11,7 +11,7 @@ class CommandParserTest {
 
     companion object {
         val moveForward = MoveForwardCommand("Rover")
-        val moveBackward = MoveBackwardCommand("Rover")
+        val moveBackward = MoveBackwardCommand("Rover", PlanetMap(listOf(Position(1,1))))
         val turnRight = RotateRightCommand("Rover")
         val turnLeft = RotateLeftCommand("Rover")
     }
@@ -64,7 +64,7 @@ class CommandParser() {
 
     private fun parseSingleCommand(command: Char) : Command = when(command) {
         'F' -> MoveForwardCommand("Rover")
-        'B' -> MoveBackwardCommand("Rover")
+        'B' -> MoveBackwardCommand("Rover", PlanetMap(listOf(Position(1,1))))
         'R' -> RotateRightCommand("Rover")
         'L' -> RotateLeftCommand ("Rover")
         else -> throw IllegalArgumentException("CommandNotSupported")
