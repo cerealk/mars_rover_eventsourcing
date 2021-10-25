@@ -17,7 +17,7 @@ class Rover {
     private lateinit var roverName: String
 
     private lateinit var currentRoverPosition: Position
-    private lateinit var currentRoverOrientation: Orientation
+    private lateinit var orientation: Orientation
 
     @CommandHandler
     constructor(command: DropLanderCommand) {
@@ -28,17 +28,17 @@ class Rover {
     fun landing(event: RoverLandedEvent) {
         roverName = event.rover
         currentRoverPosition = event.position
-        currentRoverOrientation = event.orientation
+        orientation = event.orientation
     }
 
 
 
-    private fun move(direction: Direction): Position {
+    private fun nextClick(direction: Direction): Position {
         val delta = when (direction) {
             F -> 1
             B -> -1
         }
-        return when (currentRoverOrientation) {
+        return when (orientation) {
             N -> currentRoverPosition.copy(y = currentRoverPosition.y + delta)
             S -> currentRoverPosition.copy(y = currentRoverPosition.y - delta)
             E -> currentRoverPosition.copy(x = currentRoverPosition.x + delta)
@@ -61,11 +61,11 @@ class Rover {
                         moveIfFree(B, command.planetMap)
                     }
                     is RotateLeftCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(rotateLeft(), L))
+                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.rotateLeft(), L))
                         true
                     }
                     is RotateRightCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(rotateRight(), R))
+                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.rotateRight(), R))
                         true
                     }
                     else -> false
@@ -79,7 +79,7 @@ class Rover {
         direction: Direction,
         planetMap: PlanetMap
     ): Boolean {
-        val targetPosition = move(direction)
+        val targetPosition = nextClick(direction)
         val canMove = planetMap.probe(targetPosition)
         if (canMove) {
             AggregateLifecycle.apply(RoverMovedEvent(targetPosition, direction))
@@ -89,24 +89,9 @@ class Rover {
         return canMove
     }
 
-
-    private fun rotateLeft(): Orientation = when (currentRoverOrientation) {
-        N -> W
-        S -> E
-        W -> S
-        E -> N
-    }
-
-    private fun rotateRight(): Orientation = when (currentRoverOrientation) {
-        N -> E
-        S -> W
-        W -> N
-        E -> S
-    }
-
     @EventHandler
     fun handleRoverRotation(event: RoverTurnedEvent) {
-        currentRoverOrientation = event.newOrientation
+        orientation = event.newOrientation
     }
 
     @EventHandler
@@ -120,6 +105,22 @@ data class PlanetMap(val obstacles: List<Position> = emptyList()) {
 }
 
 data class Position(val x: Int, val y: Int)
-enum class Orientation { N, S, W, E }
+enum class Orientation {
+    N, S, W, E;
+
+    fun rotateLeft() = when(this){
+        N -> W
+        S -> E
+        W -> S
+        E -> N
+    }
+
+    fun rotateRight(): Orientation = when (this) {
+        N -> E
+        S -> W
+        W -> N
+        E -> S
+    }
+}
 enum class Direction { F, B }
 enum class Rotation { L, R }
