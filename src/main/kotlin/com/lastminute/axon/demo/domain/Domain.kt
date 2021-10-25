@@ -61,11 +61,11 @@ class Rover {
                         moveIfFree(B, command.planetMap)
                     }
                     is RotateLeftCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.rotateLeft(), L))
+                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.left(), L))
                         true
                     }
                     is RotateRightCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.rotateRight(), R))
+                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.right(), R))
                         true
                     }
                     else -> false
@@ -108,14 +108,14 @@ data class Position(val x: Int, val y: Int)
 enum class Orientation {
     N, S, W, E;
 
-    fun rotateLeft() = when(this){
+    fun left() = when(this){
         N -> W
         S -> E
         W -> S
         E -> N
     }
 
-    fun rotateRight(): Orientation = when (this) {
+    fun right(): Orientation = when (this) {
         N -> E
         S -> W
         W -> N
