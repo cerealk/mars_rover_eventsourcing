@@ -44,7 +44,7 @@ class Rover {
     @CommandHandler
     fun moveBackward(command: MoveBackwardCommand) {
         val newPosition = move(B)
-        if (command.planetMap.probe(newPosition)){
+        if (command.planetMap.probe(newPosition)) {
             AggregateLifecycle.apply(RoverMovedEvent(newPosition, B))
         } else {
             AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
@@ -79,13 +79,45 @@ class Rover {
     @CommandHandler
     fun movePath(command: FollowPathCommand) {
 
-        command.commands.forEach { cmd ->
-            when (cmd) {
-                is MoveForwardCommand -> moveForward(cmd)
-                is MoveBackwardCommand -> moveBackward(cmd)
-                is RotateLeftCommand -> rotateLeft(cmd)
-                is RotateRightCommand -> rotateRight(cmd)
+        command.commands.fold(true) { clearPath, cmd ->
+            if (!clearPath)
+                false
+            else {
+                when (cmd) {
+                    is MoveForwardCommand -> {
+                        val newPosition = move(F)
+                        if (cmd.planetMap.probe(newPosition)) {
+                            AggregateLifecycle.apply(RoverMovedEvent(newPosition, F))
+                            true
+                        } else {
+                            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
+                            false
+                        }
+                    }
+                    is MoveBackwardCommand -> {
+                        val newPosition = move(B)
+                        if (cmd.planetMap.probe(newPosition)) {
+                            AggregateLifecycle.apply(RoverMovedEvent(newPosition, B))
+                            true
+                        } else {
+                            AggregateLifecycle.apply(ObstacleFoundEvent(newPosition))
+                            false
+                        }
+                    }
+                    is RotateLeftCommand -> {
+                        val newDirection = rotateLeft()
+                        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, L))
+                        true
+                    }
+                    is RotateRightCommand -> {
+                        val newDirection = rotateRight()
+                        AggregateLifecycle.apply(RoverTurnedEvent(newDirection, R))
+                        true
+                    }
+                    else -> false
+                }
             }
+
         }
     }
 

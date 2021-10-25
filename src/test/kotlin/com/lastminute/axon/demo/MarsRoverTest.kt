@@ -105,6 +105,18 @@ class MarsRoverTest {
             .expectEvents(ObstacleFoundEvent(Position(1,1)))
 
     }
+
+    @Test
+    internal fun `when an obstacle is found the rover stops`() {
+        val planet = PlanetMap(listOf(Position(1, 4)))
+        fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
+            .`when`(FollowPathCommand("Mars", listOf(MoveForwardCommand("Mars", planet), MoveForwardCommand("Mars", planet), RotateRightCommand("Mars"), MoveForwardCommand("Mars", planet) )))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(
+                RoverMovedEvent(Position(1,3), F),
+                ObstacleFoundEvent(Position(1,4))
+            )
+    }
 }
 
 
