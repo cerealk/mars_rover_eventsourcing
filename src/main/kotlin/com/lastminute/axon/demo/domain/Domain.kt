@@ -32,20 +32,6 @@ class Rover {
     }
 
 
-
-    private fun nextClick(direction: Direction): Position {
-        val delta = when (direction) {
-            F -> 1
-            B -> -1
-        }
-        return when (orientation) {
-            N -> currentRoverPosition.copy(y = currentRoverPosition.y + delta)
-            S -> currentRoverPosition.copy(y = currentRoverPosition.y - delta)
-            E -> currentRoverPosition.copy(x = currentRoverPosition.x + delta)
-            W -> currentRoverPosition.copy(x = currentRoverPosition.x - delta)
-        }
-    }
-
     @CommandHandler
     fun movePath(command: FollowPathCommand) {
 
@@ -53,40 +39,37 @@ class Rover {
             if (!clearPath)
                 false
             else {
-                when (cmd) {
-                    is MoveForwardCommand -> {
-                        moveIfFree(F, command.planetMap)
-                    }
-                    is MoveBackwardCommand -> {
-                        moveIfFree(B, command.planetMap)
-                    }
-                    is RotateLeftCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.left(), L))
-                        true
-                    }
-                    is RotateRightCommand -> {
-                        AggregateLifecycle.apply(RoverTurnedEvent(orientation.right(), R))
-                        true
-                    }
-                    else -> false
+                val event = when (cmd) {
+                    is MoveForwardCommand -> move(F, command.planetMap)
+                    is MoveBackwardCommand -> move(B, command.planetMap)
+                    is RotateLeftCommand -> RoverTurnedEvent(orientation.left(), L)
+                    is RotateRightCommand -> RoverTurnedEvent(orientation.right(), R)
+                    else ->  throw IllegalArgumentException()
                 }
+
+                AggregateLifecycle.apply(event)
+
+                event !is ObstacleFoundEvent
+
             }
 
         }
     }
 
-    private fun moveIfFree(
+    private fun move(
         direction: Direction,
         planetMap: PlanetMap
-    ): Boolean {
+    ): Event {
         val targetPosition = nextClick(direction)
         val canMove = planetMap.probe(targetPosition)
-        if (canMove) {
-            AggregateLifecycle.apply(RoverMovedEvent(targetPosition, direction))
-        } else {
-            AggregateLifecycle.apply(ObstacleFoundEvent(targetPosition))
-        }
-        return canMove
+        return if (canMove) RoverMovedEvent(targetPosition, direction) else ObstacleFoundEvent(targetPosition)
+    }
+
+    private fun nextClick(direction: Direction): Position = when (orientation) {
+        N -> currentRoverPosition.copy(y = currentRoverPosition.y + direction.delta)
+        S -> currentRoverPosition.copy(y = currentRoverPosition.y - direction.delta)
+        E -> currentRoverPosition.copy(x = currentRoverPosition.x + direction.delta)
+        W -> currentRoverPosition.copy(x = currentRoverPosition.x - direction.delta)
     }
 
     @EventHandler
@@ -105,10 +88,11 @@ data class PlanetMap(val obstacles: List<Position> = emptyList()) {
 }
 
 data class Position(val x: Int, val y: Int)
+
 enum class Orientation {
     N, S, W, E;
 
-    fun left() = when(this){
+    fun left() = when (this) {
         N -> W
         S -> E
         W -> S
@@ -122,5 +106,6 @@ enum class Orientation {
         E -> S
     }
 }
-enum class Direction { F, B }
+
+enum class Direction(val delta: Int) { F(1), B(-1); }
 enum class Rotation { L, R }
