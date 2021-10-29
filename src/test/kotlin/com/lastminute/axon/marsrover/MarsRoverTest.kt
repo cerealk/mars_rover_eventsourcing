@@ -32,7 +32,7 @@ class MarsRoverTest {
         fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(FollowPathCommand("Mars", listOf(MoveForwardCommand))).
                 expectSuccessfulHandlerExecution().
-                expectEvents(RoverMovedEvent(Position(1, 3), F))
+                expectEvents(RoverMovedEvent("Mars", Position(1, 3), F))
     }
 
     @Test
@@ -43,7 +43,7 @@ class MarsRoverTest {
         fixture.given(RoverLandedEvent("Mars", Position(1, 2), N))
             .`when`(FollowPathCommand("Mars", listOf(MoveBackwardCommand))).
             expectSuccessfulHandlerExecution().
-            expectEvents(RoverMovedEvent(newPosition, direction))
+            expectEvents(RoverMovedEvent("Mars", newPosition, direction))
     }
 
     @Test
@@ -72,7 +72,7 @@ class MarsRoverTest {
             .andGiven(RoverTurnedEvent(W,L))
             .`when`(FollowPathCommand("Mars", listOf(MoveForwardCommand)))
             .expectSuccessfulHandlerExecution()
-            .expectEvents(RoverMovedEvent(Position(0,2), F))
+            .expectEvents(RoverMovedEvent("Mars", Position(0,2), F))
     }
 
     @Test
@@ -83,10 +83,10 @@ class MarsRoverTest {
             ))
             .expectSuccessfulHandlerExecution()
             .expectEvents(
-                RoverMovedEvent(Position(1,3), F),
-                RoverMovedEvent(Position(1,4), F),
+                RoverMovedEvent("Mars", Position(1,3), F),
+                RoverMovedEvent("Mars", Position(1,4), F),
                 RoverTurnedEvent(E, R),
-                RoverMovedEvent(Position(2,4), F),
+                RoverMovedEvent("Mars", Position(2,4), F),
             )
     }
 
@@ -118,7 +118,7 @@ class MarsRoverTest {
             ))
             .expectSuccessfulHandlerExecution()
             .expectEvents(
-                RoverMovedEvent(Position(1,3), F),
+                RoverMovedEvent("Mars", Position(1,3), F),
                 ObstacleFoundEvent(Position(1,4))
             )
     }

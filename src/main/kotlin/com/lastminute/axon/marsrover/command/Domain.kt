@@ -62,7 +62,7 @@ class Rover {
     ): Event {
         val targetPosition = nextClick(direction)
         val canMove = planetMap.probe(targetPosition)
-        return if (canMove) RoverMovedEvent(targetPosition, direction) else ObstacleFoundEvent(targetPosition)
+        return if (canMove) RoverMovedEvent("Mars", targetPosition, direction) else ObstacleFoundEvent(targetPosition)
     }
 
     private fun nextClick(direction: Direction): Position = when (orientation) {
