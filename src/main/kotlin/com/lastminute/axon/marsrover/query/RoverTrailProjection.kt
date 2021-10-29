@@ -5,12 +5,16 @@ import com.lastminute.axon.marsrover.RoverLandedEvent
 
 class RoverTrailProjection {
 
-    fun on(roverLandedEvent: RoverLandedEvent) {
-        TODO("Not yet implemented")
+    //TODO: this is a good candidate to be moved to a repository
+    private val roversTrail = mutableMapOf<String, MutableList<Position>>()
+
+    fun on(c: RoverLandedEvent) {
+        val t = roversTrail.getOrPut(c.rover) { mutableListOf() }
+        t.add(c.position)
     }
 
     fun trailFor(roverId: String): Trail {
-        TODO("Not yet implemented")
+        return Trail(roverId, roversTrail.getOrDefault(roverId, mutableListOf()))
     }
 
 
