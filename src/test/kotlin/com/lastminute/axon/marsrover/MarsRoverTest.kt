@@ -1,9 +1,9 @@
-package com.lastminute.axon.demo
+package com.lastminute.axon.marsrover
 
-import com.lastminute.axon.demo.Direction.B
-import com.lastminute.axon.demo.Direction.F
-import com.lastminute.axon.demo.Orientation.*
-import com.lastminute.axon.demo.Rotation.*
+import com.lastminute.axon.marsrover.Direction.B
+import com.lastminute.axon.marsrover.Direction.F
+import com.lastminute.axon.marsrover.Orientation.*
+import com.lastminute.axon.marsrover.Rotation.*
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.junit.jupiter.api.Test
 

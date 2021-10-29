@@ -1,11 +1,11 @@
-package com.lastminute.axon.demo
+package com.lastminute.axon.marsrover
 
-import com.lastminute.axon.demo.Direction.B
-import com.lastminute.axon.demo.Direction.F
-import com.lastminute.axon.demo.Orientation.*
-import com.lastminute.axon.demo.Rotation.*
+import com.lastminute.axon.marsrover.Direction.B
+import com.lastminute.axon.marsrover.Direction.F
+import com.lastminute.axon.marsrover.Orientation.*
+import com.lastminute.axon.marsrover.Rotation.*
 import org.axonframework.commandhandling.CommandHandler
-import org.axonframework.eventhandling.EventHandler
+import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier
 import org.axonframework.modelling.command.AggregateLifecycle
 import org.axonframework.spring.stereotype.Aggregate
@@ -24,7 +24,7 @@ class Rover {
         AggregateLifecycle.apply(RoverLandedEvent(command.rover, command.position, command.orientation))
     }
 
-    @EventHandler
+    @EventSourcingHandler
     fun landing(event: RoverLandedEvent) {
         roverName = event.rover
         currentRoverPosition = event.position
@@ -72,17 +72,19 @@ class Rover {
         W -> currentRoverPosition.copy(x = currentRoverPosition.x - direction.delta)
     }
 
-    @EventHandler
+    @EventSourcingHandler
     fun handleRoverRotation(event: RoverTurnedEvent) {
         orientation = event.newOrientation
     }
 
-    @EventHandler
+    @EventSourcingHandler
     fun handleRoverMovement(event: RoverMovedEvent) {
         currentRoverPosition = event.position
     }
 }
 
+
+//TODO: find where to put these datastructures
 data class PlanetMap(val obstacles: List<Position> = emptyList()) {
     fun probe(newPosition: Position): Boolean = !obstacles.contains(newPosition)
 }

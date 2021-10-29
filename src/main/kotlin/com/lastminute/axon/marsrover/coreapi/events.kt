@@ -1,4 +1,4 @@
-package com.lastminute.axon.demo
+package com.lastminute.axon.marsrover
 
 interface Event
 

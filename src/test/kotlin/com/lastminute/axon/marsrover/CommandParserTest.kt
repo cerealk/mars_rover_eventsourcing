@@ -1,4 +1,4 @@
-package com.lastminute.axon.demo
+package com.lastminute.axon.marsrover
 
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainInOrder
