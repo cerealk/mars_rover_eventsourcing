@@ -1,5 +1,6 @@
 package com.lastminute.axon.marsrover
 
+import com.lastminute.axon.marsrover.application.CommandParser
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.junit.jupiter.api.Test
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.assertThrows
 
 class CommandParserTest {
 
-    private val parser:CommandParser = CommandParser()
+    private val parser: CommandParser = CommandParser()
 
     companion object {
         val moveForward = MoveForwardCommand
@@ -57,17 +58,3 @@ class CommandParserTest {
     }
 }
 
-class CommandParser() {
-
-    fun parseCommands(commandSequence: String) =
-        commandSequence.toCharArray().map { c -> parseSingleCommand(c)}
-
-    private fun parseSingleCommand(command: Char) : Command = when(command) {
-        'F' -> MoveForwardCommand
-        'B' -> MoveBackwardCommand
-        'R' -> RotateRightCommand
-        'L' -> RotateLeftCommand
-        else -> throw IllegalArgumentException("CommandNotSupported")
-    }
-
-}

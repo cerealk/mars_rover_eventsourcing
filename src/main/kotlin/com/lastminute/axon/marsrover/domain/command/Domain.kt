@@ -40,8 +40,8 @@ class Rover {
                 false
             else {
                 val event = when (cmd) {
-                    is MoveForwardCommand -> move(F, command.planetMap)
-                    is MoveBackwardCommand -> move(B, command.planetMap)
+                    is MoveForwardCommand -> move(command.rover, F, command.planetMap)
+                    is MoveBackwardCommand -> move(command.rover, B, command.planetMap)
                     is RotateLeftCommand -> RoverTurnedEvent(orientation.left(), L)
                     is RotateRightCommand -> RoverTurnedEvent(orientation.right(), R)
                     else ->  throw IllegalArgumentException()
@@ -57,12 +57,13 @@ class Rover {
     }
 
     private fun move(
+        rover: String,
         direction: Direction,
         planetMap: PlanetMap
     ): Event {
         val targetPosition = nextClick(direction)
         val canMove = planetMap.probe(targetPosition)
-        return if (canMove) RoverMovedEvent("Mars", targetPosition, direction) else ObstacleFoundEvent(targetPosition)
+        return if (canMove) RoverMovedEvent(rover, targetPosition, direction) else ObstacleFoundEvent(targetPosition)
     }
 
     private fun nextClick(direction: Direction): Position = when (orientation) {
