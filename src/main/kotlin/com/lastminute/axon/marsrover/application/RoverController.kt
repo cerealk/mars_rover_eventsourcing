@@ -23,16 +23,13 @@ class RoverController {
     @Autowired
     lateinit var queryGateway: QueryGateway
 
-    @Autowired
-    lateinit var eventStore: EmbeddedEventStore
-
     val commandParser = CommandParser()
 
     @RequestMapping("rover/{moves}")
     fun move(@PathVariable("moves") moves: String): Trail {
         val commands = commandParser.parseCommands(moves)
 
-        //TODO: here the value returned is the roverId
+        //a command creating an aggregate returns the Id of the aggreegate itself (?)
         val res = commandGateway.sendAndWait<Any>(
             DropLanderCommand("Mars1", Position(1,2), Orientation.N)
         )
