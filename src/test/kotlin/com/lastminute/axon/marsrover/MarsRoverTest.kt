@@ -1,9 +1,13 @@
 package com.lastminute.axon.marsrover
 
-import com.lastminute.axon.marsrover.Direction.B
-import com.lastminute.axon.marsrover.Direction.F
-import com.lastminute.axon.marsrover.Orientation.*
-import com.lastminute.axon.marsrover.Rotation.*
+import com.lastminute.axon.marsrover.domain.command.Direction.B
+import com.lastminute.axon.marsrover.domain.command.Direction.F
+import com.lastminute.axon.marsrover.domain.command.Orientation.*
+import com.lastminute.axon.marsrover.domain.command.PlanetMap
+import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Rotation.*
+import com.lastminute.axon.marsrover.domain.command.Rover
+import com.lastminute.axon.marsrover.domain.coreapi.*
 import org.axonframework.test.aggregate.AggregateTestFixture
 import org.junit.jupiter.api.Test
 
@@ -19,11 +23,13 @@ class MarsRoverTest {
         val landingOrientation = N
         val dropLanderCommand = DropLanderCommand("Mars", landingSpot, landingOrientation)
 
-        fixture.`when`(dropLanderCommand).expectSuccessfulHandlerExecution().expectEvents(RoverLandedEvent(
+        fixture.`when`(dropLanderCommand).expectSuccessfulHandlerExecution().expectEvents(
+            RoverLandedEvent(
             "Mars",
             landingSpot,
             landingOrientation
-        ))
+        )
+        )
     }
 
     @Test
@@ -78,9 +84,11 @@ class MarsRoverTest {
     @Test
     internal fun `the rover can follow a path`() {
         fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
-            .`when`(FollowPathCommand("Mars",
+            .`when`(
+                FollowPathCommand("Mars",
                 listOf(MoveForwardCommand, MoveForwardCommand, RotateRightCommand, MoveForwardCommand)
-            ))
+            )
+            )
             .expectSuccessfulHandlerExecution()
             .expectEvents(
                 RoverMovedEvent("Mars", Position(1,3), F),
@@ -112,10 +120,12 @@ class MarsRoverTest {
     internal fun `when an obstacle is found the rover stops`() {
         val planet = PlanetMap(listOf(Position(1, 4)))
         fixture.given(RoverLandedEvent("Mars", Position(1,2), N))
-            .`when`(FollowPathCommand("Mars",
+            .`when`(
+                FollowPathCommand("Mars",
                 listOf(MoveForwardCommand, MoveForwardCommand, RotateRightCommand, MoveForwardCommand)
             , planet
-            ))
+            )
+            )
             .expectSuccessfulHandlerExecution()
             .expectEvents(
                 RoverMovedEvent("Mars", Position(1,3), F),

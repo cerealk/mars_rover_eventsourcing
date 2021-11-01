@@ -1,6 +1,6 @@
 package com.lastminute.axon.marsrover.application
 
-import com.lastminute.axon.marsrover.*
+import com.lastminute.axon.marsrover.domain.coreapi.*
 
 class CommandParser() {
 

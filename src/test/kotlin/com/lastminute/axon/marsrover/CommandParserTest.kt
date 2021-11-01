@@ -1,6 +1,10 @@
 package com.lastminute.axon.marsrover
 
 import com.lastminute.axon.marsrover.application.CommandParser
+import com.lastminute.axon.marsrover.domain.coreapi.MoveBackwardCommand
+import com.lastminute.axon.marsrover.domain.coreapi.MoveForwardCommand
+import com.lastminute.axon.marsrover.domain.coreapi.RotateLeftCommand
+import com.lastminute.axon.marsrover.domain.coreapi.RotateRightCommand
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.junit.jupiter.api.Test

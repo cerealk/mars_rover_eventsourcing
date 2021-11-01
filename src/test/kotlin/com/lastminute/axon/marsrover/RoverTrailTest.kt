@@ -1,7 +1,10 @@
 package com.lastminute.axon.marsrover
 
-import com.lastminute.axon.marsrover.Direction.F
-import com.lastminute.axon.marsrover.Orientation.E
+import com.lastminute.axon.marsrover.domain.command.Direction.F
+import com.lastminute.axon.marsrover.domain.command.Orientation.E
+import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
+import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import com.lastminute.axon.marsrover.domain.query.RoverTrailProjection
 import com.lastminute.axon.marsrover.domain.query.Trail
 import com.lastminute.axon.marsrover.domain.query.TrailQuery

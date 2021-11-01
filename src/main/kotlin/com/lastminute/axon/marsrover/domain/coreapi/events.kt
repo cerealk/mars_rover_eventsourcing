@@ -1,4 +1,9 @@
-package com.lastminute.axon.marsrover
+package com.lastminute.axon.marsrover.domain.coreapi
+
+import com.lastminute.axon.marsrover.domain.command.Direction
+import com.lastminute.axon.marsrover.domain.command.Orientation
+import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Rotation
 
 interface Event
 

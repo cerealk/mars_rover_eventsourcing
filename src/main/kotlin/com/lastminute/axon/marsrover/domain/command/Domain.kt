@@ -1,9 +1,10 @@
-package com.lastminute.axon.marsrover
+package com.lastminute.axon.marsrover.domain.command
 
-import com.lastminute.axon.marsrover.Direction.B
-import com.lastminute.axon.marsrover.Direction.F
-import com.lastminute.axon.marsrover.Orientation.*
-import com.lastminute.axon.marsrover.Rotation.*
+import com.lastminute.axon.marsrover.domain.command.Direction.B
+import com.lastminute.axon.marsrover.domain.command.Direction.F
+import com.lastminute.axon.marsrover.domain.command.Orientation.*
+import com.lastminute.axon.marsrover.domain.command.Rotation.*
+import com.lastminute.axon.marsrover.domain.coreapi.*
 import org.axonframework.commandhandling.CommandHandler
 import org.axonframework.eventsourcing.EventSourcingHandler
 import org.axonframework.modelling.command.AggregateIdentifier

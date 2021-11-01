@@ -1,8 +1,8 @@
 package com.lastminute.axon.marsrover.domain.query
 
-import com.lastminute.axon.marsrover.Position
-import com.lastminute.axon.marsrover.RoverLandedEvent
-import com.lastminute.axon.marsrover.RoverMovedEvent
+import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
+import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
 import org.springframework.stereotype.Component
