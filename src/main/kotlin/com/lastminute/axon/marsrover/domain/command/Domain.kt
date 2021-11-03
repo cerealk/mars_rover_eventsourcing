@@ -61,7 +61,7 @@ class Rover {
         rover: String,
         direction: Direction,
         planetMap: PlanetMap
-    ): Event {
+    ): RoverEvent {
         val targetPosition = nextClick(direction)
         val canMove = planetMap.probe(targetPosition)
         return if (canMove) RoverMovedEvent(rover, targetPosition, direction) else ObstacleFoundEvent(targetPosition)
@@ -85,6 +85,11 @@ class Rover {
     }
 }
 
+interface Command
+object MoveForwardCommand : Command
+object MoveBackwardCommand : Command
+object RotateLeftCommand : Command
+object RotateRightCommand : Command
 
 //TODO: find where to put these datastructures
 data class PlanetMap(val obstacles: List<Position> = emptyList()) {

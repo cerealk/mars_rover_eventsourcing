@@ -2,6 +2,7 @@ package com.lastminute.axon.marsrover
 
 import com.lastminute.axon.marsrover.domain.command.Direction.B
 import com.lastminute.axon.marsrover.domain.command.Direction.F
+import com.lastminute.axon.marsrover.domain.command.*
 import com.lastminute.axon.marsrover.domain.command.Orientation.*
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
 import com.lastminute.axon.marsrover.domain.command.Position
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test
 class MarsRoverTest {
 
     private val  fixture: AggregateTestFixture<Rover> = AggregateTestFixture(Rover::class.java)
-
 
     @Test
     fun theRoverCanLand(){

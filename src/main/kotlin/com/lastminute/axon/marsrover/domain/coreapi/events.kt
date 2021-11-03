@@ -1,13 +1,12 @@
 package com.lastminute.axon.marsrover.domain.coreapi
 
-import com.lastminute.axon.marsrover.domain.command.Direction
-import com.lastminute.axon.marsrover.domain.command.Orientation
-import com.lastminute.axon.marsrover.domain.command.Position
-import com.lastminute.axon.marsrover.domain.command.Rotation
+import com.lastminute.axon.marsrover.domain.command.*
 
-interface Event
+interface RoverEvent
 
-data class RoverLandedEvent(val rover: String, val position: Position, val orientation: Orientation) : Event
-data class RoverMovedEvent(val rover: String, val position: Position, val direction: Direction) : Event
-data class RoverTurnedEvent(val newOrientation: Orientation, val rotation: Rotation) : Event
-data class ObstacleFoundEvent(val position: Position) : Event
+data class RoverLandedEvent(val rover: String, val position: Position, val orientation: Orientation) : RoverEvent
+data class RoverMovedEvent(val rover: String, val position: Position, val direction: Direction) : RoverEvent
+data class RoverTurnedEvent(val newOrientation: Orientation, val rotation: Rotation) : RoverEvent
+data class ObstacleFoundEvent(val position: Position) : RoverEvent
+
+data class PlanetMappedEvent(val planetName: String, val planetMap: PlanetMap)

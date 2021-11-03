@@ -1,5 +1,6 @@
 package com.lastminute.axon.marsrover
 
+import com.lastminute.axon.marsrover.application.FakeSatelliteSystem
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine
 import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -21,4 +22,8 @@ class Conf {
     fun eventStorageEngine(): EventStorageEngine? {
         return InMemoryEventStorageEngine()
     }
+
+    @Bean
+    fun satelliteSystem() = FakeSatelliteSystem()
+
 }
