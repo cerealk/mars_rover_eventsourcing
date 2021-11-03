@@ -26,13 +26,12 @@ class RoverController {
 
     @PostMapping("/{planetName}/{roverName}")
     fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName")rover: String){
-        commandGateway.send<Any>(DropRoverCommand(planet, Position(1,1), N))
+        commandGateway.send<Any>(DropRoverCommand(rover, Position(1,1), N))
     }
 
 
     @PostMapping("/{planetName}/{roverName}/{moves}")
     fun move(@PathVariable("roverName") rover: String, @PathVariable("moves") moves: String){
-
         val commands = commandParser.parseCommands(moves)
         commandGateway.send<Any>(FollowPathCommand(rover, commands))
     }
