@@ -1,14 +1,12 @@
 package com.lastminute.axon.marsrover.application
 
-import com.lastminute.axon.marsrover.domain.command.Orientation
 import com.lastminute.axon.marsrover.domain.command.Orientation.N
 import com.lastminute.axon.marsrover.domain.command.Position
-import com.lastminute.axon.marsrover.domain.coreapi.DropLanderCommand
+import com.lastminute.axon.marsrover.domain.coreapi.DropRoverCommand
 import com.lastminute.axon.marsrover.domain.coreapi.FollowPathCommand
 import com.lastminute.axon.marsrover.domain.query.Trail
 import com.lastminute.axon.marsrover.domain.query.TrailQuery
 import org.axonframework.commandhandling.gateway.CommandGateway
-import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -28,7 +26,7 @@ class RoverController {
 
     @PostMapping("/{planetName}/{roverName}")
     fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName")rover: String){
-        commandGateway.send<Any>(DropLanderCommand(planet, Position(1,1), N))
+        commandGateway.send<Any>(DropRoverCommand(planet, Position(1,1), N))
     }
 
 

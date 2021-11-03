@@ -8,7 +8,7 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier
 
 data class ProbePlanetCommand(val planetName: String)
 
-data class DropLanderCommand(@TargetAggregateIdentifier val rover: String, val position: Position, val orientation: Orientation)
+data class DropRoverCommand(@TargetAggregateIdentifier val rover: String, val position: Position, val orientation: Orientation)
 
 data class FollowPathCommand(
     @TargetAggregateIdentifier val rover: String,

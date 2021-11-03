@@ -21,7 +21,7 @@ class Rover {
     private lateinit var orientation: Orientation
 
     @CommandHandler
-    constructor(command: DropLanderCommand) {
+    constructor(command: DropRoverCommand) {
         AggregateLifecycle.apply(RoverLandedEvent(command.rover, command.position, command.orientation))
     }
 
