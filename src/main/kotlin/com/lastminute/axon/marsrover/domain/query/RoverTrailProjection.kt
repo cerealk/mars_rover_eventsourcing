@@ -3,6 +3,7 @@ package com.lastminute.axon.marsrover.domain.query
 import com.lastminute.axon.marsrover.domain.command.Position
 import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
+import com.lastminute.axon.marsrover.domain.coreapi.TrailQuery
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
 import org.springframework.stereotype.Component
@@ -33,5 +34,5 @@ class RoverTrailProjection {
 
 }
 
-data class TrailQuery(val roverId:String)
+
 data class Trail(val roverId: String,  val path: List<Position>)
