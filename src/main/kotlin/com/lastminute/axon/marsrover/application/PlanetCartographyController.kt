@@ -1,6 +1,7 @@
 package com.lastminute.axon.marsrover.application
 
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
+import com.lastminute.axon.marsrover.domain.coreapi.PlanetMapQuery
 import com.lastminute.axon.marsrover.domain.coreapi.ProbePlanetCommand
 import com.lastminute.axon.marsrover.domain.query.PlanetMapProjection
 import com.lastminute.axon.marsrover.domain.service.SatelliteSystem
@@ -31,7 +32,7 @@ class PlanetCartographyController {
 
     @GetMapping("/planet/{planetName}")
     fun getCartography(@PathVariable("planetName") planetName: String): PlanetMap =
-        planetMapProjection.mapOf(planetName)
+        planetMapProjection.mapOf(planetName, PlanetMapQuery(planetName))
 
 
 }

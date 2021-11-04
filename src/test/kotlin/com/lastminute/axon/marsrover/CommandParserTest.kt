@@ -22,7 +22,7 @@ class CommandParserTest {
     }
 
     @Test
-    internal fun `F stands for "forward"`() {
+    internal fun `F stands for forward`() {
         parser.parseCommands("F") shouldContainExactly listOf(moveForward)
     }
 

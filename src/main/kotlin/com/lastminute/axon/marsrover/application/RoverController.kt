@@ -6,8 +6,8 @@ import com.lastminute.axon.marsrover.domain.command.Position
 import com.lastminute.axon.marsrover.domain.coreapi.DropRoverCommand
 import com.lastminute.axon.marsrover.domain.coreapi.FollowPathCommand
 import com.lastminute.axon.marsrover.domain.coreapi.PlanetMapQuery
+import com.lastminute.axon.marsrover.domain.coreapi.TrailQuery
 import com.lastminute.axon.marsrover.domain.query.Trail
-import com.lastminute.axon.marsrover.domain.query.TrailQuery
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.queryhandling.QueryGateway
 import org.springframework.beans.factory.annotation.Autowired
