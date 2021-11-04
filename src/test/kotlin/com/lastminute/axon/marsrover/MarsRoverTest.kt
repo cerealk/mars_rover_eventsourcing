@@ -21,9 +21,9 @@ class MarsRoverTest {
 
         val landingSpot = Position(1,2)
         val landingOrientation = N
-        val dropLanderCommand = DropRoverCommand("Mars", landingSpot, landingOrientation)
+        val dropRoverCommand = DropRoverCommand("Mars", landingSpot, landingOrientation)
 
-        fixture.`when`(dropLanderCommand).expectSuccessfulHandlerExecution().expectEvents(
+        fixture.`when`(dropRoverCommand).expectSuccessfulHandlerExecution().expectEvents(
             RoverLandedEvent(
             "Mars",
             landingSpot,
