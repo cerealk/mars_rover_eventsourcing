@@ -19,7 +19,7 @@ class PlanetExplorationTest {
     internal fun `can probe the surface of a planet`() {
         fixture
             .registerInjectableResource(TestSatelliteProbeService(listOf(Position(3, 7))))
-            .given()
+            .givenNoPriorActivity()
             .`when`(ProbePlanetCommand("Mars"))
             .expectSuccessfulHandlerExecution()
             .expectEvents(PlanetMappedEvent("Mars", PlanetMap(listOf(Position(3, 7)))))

@@ -10,11 +10,12 @@ import com.lastminute.axon.marsrover.domain.command.Rotation.*
 import com.lastminute.axon.marsrover.domain.command.Rover
 import com.lastminute.axon.marsrover.domain.coreapi.*
 import org.axonframework.test.aggregate.AggregateTestFixture
+import org.axonframework.test.aggregate.FixtureConfiguration
 import org.junit.jupiter.api.Test
 
 class MarsRoverTest {
 
-    private val  fixture: AggregateTestFixture<Rover> = AggregateTestFixture(Rover::class.java)
+    private val  fixture: FixtureConfiguration<Rover> = AggregateTestFixture(Rover::class.java)
 
     private val roverName = "MarsRover1"
 
@@ -25,7 +26,9 @@ class MarsRoverTest {
         val landingOrientation = N
         val dropRoverCommand = DropRoverCommand(roverName, landingSpot, landingOrientation)
 
-        fixture.`when`(dropRoverCommand).expectSuccessfulHandlerExecution().expectEvents(
+        fixture
+            .givenNoPriorActivity()
+            .`when`(dropRoverCommand).expectSuccessfulHandlerExecution().expectEvents(
             RoverLandedEvent(
                 roverName,
             landingSpot,
@@ -33,6 +36,8 @@ class MarsRoverTest {
         )
         )
     }
+
+
 
     @Test
     fun theRoverCanMoveForward(){
