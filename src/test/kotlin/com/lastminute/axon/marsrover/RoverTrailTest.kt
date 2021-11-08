@@ -2,7 +2,7 @@ package com.lastminute.axon.marsrover
 
 import com.lastminute.axon.marsrover.domain.command.Direction.F
 import com.lastminute.axon.marsrover.domain.command.Orientation.E
-import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Coordinates
 import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.TrailQuery
@@ -18,9 +18,9 @@ class RoverTrailTest {
     internal fun `a rover just landed has only one position`() {
         val roverTrailProjection = RoverTrailProjection()
 
-        roverTrailProjection.on(RoverLandedEvent("Mars", Position(1,2), E))
+        roverTrailProjection.on(RoverLandedEvent("Mars", Coordinates(1,2), E))
 
-        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Position(1,2)))
+        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Coordinates(1,2)))
     }
 
 
@@ -28,11 +28,11 @@ class RoverTrailTest {
     internal fun `the trail tracks when a rover moves`() {
         val roverTrailProjection = RoverTrailProjection()
 
-        roverTrailProjection.on(RoverLandedEvent("Mars", Position(1,2), E))
-        roverTrailProjection.on(RoverMovedEvent("Mars", Position(2,2), F))
+        roverTrailProjection.on(RoverLandedEvent("Mars", Coordinates(1,2), E))
+        roverTrailProjection.on(RoverMovedEvent("Mars", Coordinates(2,2), F))
 
 
-        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Position(1,2), Position(2,2)))
+        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Coordinates(1,2), Coordinates(2,2)))
     }
 }
 

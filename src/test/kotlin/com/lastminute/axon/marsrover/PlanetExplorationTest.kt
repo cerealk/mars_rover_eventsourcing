@@ -2,7 +2,7 @@ package com.lastminute.axon.marsrover
 
 import com.lastminute.axon.marsrover.domain.command.PlanetCartography
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
-import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Coordinates
 import com.lastminute.axon.marsrover.domain.coreapi.PlanetMappedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.ProbePlanetCommand
 import com.lastminute.axon.marsrover.domain.service.SatelliteSystem
@@ -18,15 +18,15 @@ class PlanetExplorationTest {
     @Test
     internal fun `can probe the surface of a planet`() {
         fixture
-            .registerInjectableResource(TestSatelliteProbeService(listOf(Position(3, 7))))
+            .registerInjectableResource(TestSatelliteProbeService(listOf(Coordinates(3, 7))))
             .givenNoPriorActivity()
             .`when`(ProbePlanetCommand("Mars"))
             .expectSuccessfulHandlerExecution()
-            .expectEvents(PlanetMappedEvent("Mars", PlanetMap(listOf(Position(3, 7)))))
+            .expectEvents(PlanetMappedEvent("Mars", PlanetMap(listOf(Coordinates(3, 7)))))
     }
 }
 
 
-class TestSatelliteProbeService(private val obstaclesCoordinates: List<Position>): SatelliteSystem {
+class TestSatelliteProbeService(private val obstaclesCoordinates: List<Coordinates>): SatelliteSystem {
     override fun probe() = obstaclesCoordinates
 }

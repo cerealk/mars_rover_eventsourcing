@@ -17,7 +17,7 @@ class Rover {
     @AggregateIdentifier
     private lateinit var roverName: String
 
-    private lateinit var currentRoverPosition: Position
+    private lateinit var currentRoverPosition: Coordinates
 
     private lateinit var orientation: Orientation
 
@@ -81,7 +81,7 @@ class Rover {
         return if (canMove) RoverMovedEvent(rover, targetPosition, direction) else ObstacleFoundEvent(targetPosition)
     }
 
-    private fun nextClick(direction: Direction): Position = when (orientation) {
+    private fun nextClick(direction: Direction): Coordinates = when (orientation) {
         N -> currentRoverPosition.copy(y = currentRoverPosition.y + direction.delta)
         S -> currentRoverPosition.copy(y = currentRoverPosition.y - direction.delta)
         E -> currentRoverPosition.copy(x = currentRoverPosition.x + direction.delta)
@@ -106,11 +106,11 @@ object RotateLeftCommand : Command
 object RotateRightCommand : Command
 
 //TODO: find where to put these datastructures
-data class PlanetMap(val obstacles: List<Position> = emptyList()) {
-    fun probe(newPosition: Position): Boolean = !obstacles.contains(newPosition)
+data class PlanetMap(val obstacles: List<Coordinates> = emptyList()) {
+    fun probe(newPosition: Coordinates): Boolean = !obstacles.contains(newPosition)
 }
 
-data class Position(val x: Int, val y: Int)
+data class Coordinates(val x: Int, val y: Int)
 
 enum class Orientation {
     N, S, W, E;

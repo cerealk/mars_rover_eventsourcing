@@ -1,6 +1,6 @@
 package com.lastminute.axon.marsrover.domain.query
 
-import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Coordinates
 import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.TrailQuery
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class RoverTrailProjection {
 
     //TODO: this is a good candidate to be moved to a repository
-    private val roversTrail = mutableMapOf<String, MutableList<Position>>()
+    private val roversTrail = mutableMapOf<String, MutableList<Coordinates>>()
 
     @EventHandler
     fun on(event: RoverLandedEvent) {
@@ -35,4 +35,4 @@ class RoverTrailProjection {
 }
 
 
-data class Trail(val roverId: String,  val path: List<Position>)
+data class Trail(val roverId: String,  val path: List<Coordinates>)

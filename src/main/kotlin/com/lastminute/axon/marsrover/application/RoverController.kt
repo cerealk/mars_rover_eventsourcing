@@ -2,7 +2,7 @@ package com.lastminute.axon.marsrover.application
 
 import com.lastminute.axon.marsrover.domain.command.Orientation.N
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
-import com.lastminute.axon.marsrover.domain.command.Position
+import com.lastminute.axon.marsrover.domain.command.Coordinates
 import com.lastminute.axon.marsrover.domain.coreapi.DropRoverCommand
 import com.lastminute.axon.marsrover.domain.coreapi.FollowPathCommand
 import com.lastminute.axon.marsrover.domain.coreapi.PlanetMapQuery
@@ -28,7 +28,7 @@ class RoverController {
 
     @PostMapping("/{planetName}/{roverName}")
     fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName")rover: String){
-        commandGateway.send<Any>(DropRoverCommand(rover, Position(1,1), N))
+        commandGateway.send<Any>(DropRoverCommand(rover, Coordinates(1,1), N))
     }
 
 
