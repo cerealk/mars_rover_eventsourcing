@@ -1,24 +1,24 @@
 package com.lastminute.axon.marsrover
 
 import com.lastminute.axon.marsrover.application.CommandParser
-import com.lastminute.axon.marsrover.domain.command.MoveBackwardCommand
-import com.lastminute.axon.marsrover.domain.command.MoveForwardCommand
-import com.lastminute.axon.marsrover.domain.command.RotateLeftCommand
-import com.lastminute.axon.marsrover.domain.command.RotateRightCommand
+import com.lastminute.axon.marsrover.domain.command.MoveBackward
+import com.lastminute.axon.marsrover.domain.command.MoveForward
+import com.lastminute.axon.marsrover.domain.command.RotateLeft
+import com.lastminute.axon.marsrover.domain.command.RotateRight
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainInOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class CommandParserTest {
+class RoverCommandParserTest {
 
     private val parser: CommandParser = CommandParser()
 
     companion object {
-        val moveForward = MoveForwardCommand
-        val moveBackward = MoveBackwardCommand
-        val turnRight = RotateRightCommand
-        val turnLeft = RotateLeftCommand
+        val moveForward = MoveForward
+        val moveBackward = MoveBackward
+        val turnRight = RotateRight
+        val turnLeft = RotateLeft
     }
 
     @Test

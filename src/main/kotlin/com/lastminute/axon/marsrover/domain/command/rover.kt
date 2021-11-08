@@ -55,10 +55,10 @@ class Rover {
                 false
             else {
                 val event = when (cmd) {
-                    is MoveForwardCommand -> move(command.rover, F, command.planetMap)
-                    is MoveBackwardCommand -> move(command.rover, B, command.planetMap)
-                    is RotateLeftCommand -> RoverTurnedEvent(orientation.left(), L)
-                    is RotateRightCommand -> RoverTurnedEvent(orientation.right(), R)
+                    is MoveForward -> move(command.rover, F, command.planetMap)
+                    is MoveBackward -> move(command.rover, B, command.planetMap)
+                    is RotateLeft -> RoverTurnedEvent(orientation.left(), L)
+                    is RotateRight -> RoverTurnedEvent(orientation.right(), R)
                     else ->  throw IllegalArgumentException()
                 }
 
@@ -99,11 +99,11 @@ class Rover {
     }
 }
 
-interface Command
-object MoveForwardCommand : Command
-object MoveBackwardCommand : Command
-object RotateLeftCommand : Command
-object RotateRightCommand : Command
+interface RoverCommand
+object MoveForward : RoverCommand
+object MoveBackward : RoverCommand
+object RotateLeft : RoverCommand
+object RotateRight : RoverCommand
 
 //TODO: find where to put these datastructures
 data class PlanetMap(val obstacles: List<Coordinates> = emptyList()) {

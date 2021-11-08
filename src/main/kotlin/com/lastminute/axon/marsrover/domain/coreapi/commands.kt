@@ -1,6 +1,6 @@
 package com.lastminute.axon.marsrover.domain.coreapi
 
-import com.lastminute.axon.marsrover.domain.command.Command
+import com.lastminute.axon.marsrover.domain.command.RoverCommand
 import com.lastminute.axon.marsrover.domain.command.Orientation
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
 import com.lastminute.axon.marsrover.domain.command.Coordinates
@@ -17,6 +17,6 @@ data class DropRoverCommand(
 
 data class FollowPathCommand(
     @TargetAggregateIdentifier val rover: String,
-    val commands: List<Command>,
+    val commands: List<RoverCommand>,
     val planetMap: PlanetMap = PlanetMap(emptyList())
 )

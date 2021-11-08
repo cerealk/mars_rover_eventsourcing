@@ -53,7 +53,7 @@ class MarsRoverTest {
     @Test
     internal fun `a crashed rover cannot move`() {
         fixture.given(RoverExplodedEvent(roverName, Coordinates(1,2)))
-            .`when`(FollowPathCommand(roverName, listOf(MoveForwardCommand)))
+            .`when`(FollowPathCommand(roverName, listOf(MoveForward)))
             .expectSuccessfulHandlerExecution()
             .expectNoEvents()
     }
@@ -62,7 +62,7 @@ class MarsRoverTest {
     fun theRoverCanMoveForward(){
 
         fixture.given(RoverLandedEvent(roverName, Coordinates(1, 2), N))
-            .`when`(FollowPathCommand(roverName, listOf(MoveForwardCommand))).
+            .`when`(FollowPathCommand(roverName, listOf(MoveForward))).
                 expectSuccessfulHandlerExecution().
                 expectEvents(RoverMovedEvent(roverName, Coordinates(1, 3), F))
     }
@@ -73,7 +73,7 @@ class MarsRoverTest {
         val newPosition = Coordinates(1,1)
         val direction = B
         fixture.given(RoverLandedEvent(roverName, Coordinates(1, 2), N))
-            .`when`(FollowPathCommand(roverName, listOf(MoveBackwardCommand))).
+            .`when`(FollowPathCommand(roverName, listOf(MoveBackward))).
             expectSuccessfulHandlerExecution().
             expectEvents(RoverMovedEvent(roverName, newPosition, direction))
     }
@@ -82,7 +82,7 @@ class MarsRoverTest {
     fun `the rover can rotate left`() {
 
         fixture.given(RoverLandedEvent(roverName, Coordinates(1, 2), N))
-            .`when`(FollowPathCommand(roverName, listOf(RotateLeftCommand)))
+            .`when`(FollowPathCommand(roverName, listOf(RotateLeft)))
             .expectSuccessfulHandlerExecution()
             .expectEvents(RoverTurnedEvent(W, L))
 
@@ -92,7 +92,7 @@ class MarsRoverTest {
     fun `the rover can rotate right`() {
 
         fixture.given(RoverLandedEvent(roverName, Coordinates(1, 2), N))
-            .`when`(FollowPathCommand(roverName, listOf(RotateRightCommand)))
+            .`when`(FollowPathCommand(roverName, listOf(RotateRight)))
             .expectSuccessfulHandlerExecution()
             .expectEvents(RoverTurnedEvent(E, R))
 
@@ -102,7 +102,7 @@ class MarsRoverTest {
     fun `after a rotation the rover move accordingly`(){
         fixture.given(RoverLandedEvent(roverName, Coordinates(1, 2), N))
             .andGiven(RoverTurnedEvent(W,L))
-            .`when`(FollowPathCommand(roverName, listOf(MoveForwardCommand)))
+            .`when`(FollowPathCommand(roverName, listOf(MoveForward)))
             .expectSuccessfulHandlerExecution()
             .expectEvents(RoverMovedEvent(roverName, Coordinates(0,2), F))
     }
@@ -113,7 +113,7 @@ class MarsRoverTest {
             .`when`(
                 FollowPathCommand(
                     roverName,
-                listOf(MoveForwardCommand, MoveForwardCommand, RotateRightCommand, MoveForwardCommand)
+                listOf(MoveForward, MoveForward, RotateRight, MoveForward)
             )
             )
             .expectSuccessfulHandlerExecution()
@@ -128,7 +128,7 @@ class MarsRoverTest {
     @Test
     internal fun `the rover cannot overcome obstacles in front of it`() {
         fixture.given(RoverLandedEvent(roverName, Coordinates(1,2), N))
-            .`when`(FollowPathCommand(roverName, listOf(MoveForwardCommand), PlanetMap(listOf(Coordinates(1,3)))))
+            .`when`(FollowPathCommand(roverName, listOf(MoveForward), PlanetMap(listOf(Coordinates(1,3)))))
             .expectSuccessfulHandlerExecution()
             .expectEvents(ObstacleFoundEvent(Coordinates(1,3)))
 
@@ -137,7 +137,7 @@ class MarsRoverTest {
     @Test
     internal fun `the rover cannot overcome obstacles in behind it`() {
         fixture.given(RoverLandedEvent(roverName, Coordinates(1,2), N))
-            .`when`(FollowPathCommand(roverName, listOf(MoveBackwardCommand), PlanetMap(listOf(Coordinates(1,1)))))
+            .`when`(FollowPathCommand(roverName, listOf(MoveBackward), PlanetMap(listOf(Coordinates(1,1)))))
             .expectSuccessfulHandlerExecution()
             .expectEvents(ObstacleFoundEvent(Coordinates(1,1)))
 
@@ -150,7 +150,7 @@ class MarsRoverTest {
             .`when`(
                 FollowPathCommand(
                     roverName,
-                listOf(MoveForwardCommand, MoveForwardCommand, RotateRightCommand, MoveForwardCommand)
+                listOf(MoveForward, MoveForward, RotateRight, MoveForward)
             , planet
             )
             )
