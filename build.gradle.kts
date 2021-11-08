@@ -35,6 +35,7 @@ dependencies {
 
 noArg {
     annotation("org.axonframework.spring.stereotype.Aggregate")
+    invokeInitializers = true
 }
 
 tasks.withType<KotlinCompile> {

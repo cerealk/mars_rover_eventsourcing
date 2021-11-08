@@ -18,11 +18,20 @@ class Rover {
     private lateinit var roverName: String
 
     private lateinit var currentRoverPosition: Position
+
     private lateinit var orientation: Orientation
+
+    private var canOperate: Boolean = true
 
     @CommandHandler
     constructor(command: DropRoverCommand) {
-        AggregateLifecycle.apply(RoverLandedEvent(command.rover, command.position, command.orientation))
+        val evt = if (command.planetMap.probe(command.position))
+            RoverLandedEvent(command.rover, command.position, command.orientation)
+        else
+            RoverExplodedEvent(command.rover, command.position)
+
+        AggregateLifecycle.apply(evt)
+
     }
 
     @EventSourcingHandler
@@ -32,11 +41,16 @@ class Rover {
         orientation = event.orientation
     }
 
+    @EventSourcingHandler
+    fun exploding(event: RoverExplodedEvent) {
+        roverName= event.rover
+        canOperate = false
+    }
 
     @CommandHandler
     fun movePath(command: FollowPathCommand) {
 
-        command.commands.fold(true) { clearPath, cmd ->
+        command.commands.fold(canOperate) { clearPath, cmd ->
             if (!clearPath)
                 false
             else {

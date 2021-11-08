@@ -37,7 +37,26 @@ class MarsRoverTest {
         )
     }
 
+    @Test
+    internal fun `a rover explode if it lands on an obstacle`() {
 
+        val landingSpot = Position(1,2)
+        val landingOrientation = Orientation.N
+        val planetMap = PlanetMap(listOf(landingSpot))
+
+        fixture.givenNoPriorActivity()
+            .`when`(DropRoverCommand(roverName, landingSpot, landingOrientation, planetMap))
+            .expectSuccessfulHandlerExecution()
+            .expectEvents(RoverExplodedEvent(roverName, landingSpot))
+    }
+
+    @Test
+    internal fun `a crashed rover cannot move`() {
+        fixture.given(RoverExplodedEvent(roverName, Position(1,2)))
+            .`when`(FollowPathCommand(roverName, listOf(MoveForwardCommand)))
+            .expectSuccessfulHandlerExecution()
+            .expectNoEvents()
+    }
 
     @Test
     fun theRoverCanMoveForward(){
