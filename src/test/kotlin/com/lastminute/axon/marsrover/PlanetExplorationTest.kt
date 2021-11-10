@@ -22,7 +22,7 @@ class PlanetExplorationTest {
             .givenNoPriorActivity()
             .`when`(ProbePlanetCommand("Mars"))
             .expectSuccessfulHandlerExecution()
-            .expectEvents(PlanetMappedEvent("Mars", PlanetMap(listOf(Coordinates(3, 7)))))
+            .expectEvents(PlanetMappedEvent("Mars", PlanetMap("Mars",listOf(Coordinates(3, 7)))))
     }
 }
 

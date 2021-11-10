@@ -12,11 +12,11 @@ data class DropRoverCommand(
     @TargetAggregateIdentifier val rover: String,
     val position: Coordinates,
     val orientation: Orientation,
-    val planetMap: PlanetMap = PlanetMap()
+    val planetMap: PlanetMap
 )
 
 data class FollowPathCommand(
     @TargetAggregateIdentifier val rover: String,
     val commands: List<RoverCommand>,
-    val planetMap: PlanetMap = PlanetMap(emptyList())
+    val planetMap: PlanetMap
 )

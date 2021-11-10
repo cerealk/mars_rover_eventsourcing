@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
-import javax.websocket.server.PathParam
 
 @RestController
 class PlanetCartographyController {
@@ -32,7 +31,7 @@ class PlanetCartographyController {
 
     @GetMapping("/planet/{planetName}")
     fun getCartography(@PathVariable("planetName") planetName: String): PlanetMap =
-        planetMapProjection.mapOf(planetName, PlanetMapQuery(planetName))
+        planetMapProjection.mapOf(PlanetMapQuery(planetName))
 
 
 }

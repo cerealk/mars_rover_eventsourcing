@@ -106,7 +106,7 @@ object RotateLeft : RoverCommand
 object RotateRight : RoverCommand
 
 //TODO: find where to put these datastructures
-data class PlanetMap(val obstacles: List<Coordinates> = emptyList()) {
+data class PlanetMap(val planetName:String, val obstacles: List<Coordinates> = emptyList()) {
     fun probe(newPosition: Coordinates): Boolean = !obstacles.contains(newPosition)
 }
 

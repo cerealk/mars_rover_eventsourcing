@@ -3,6 +3,7 @@ package com.lastminute.axon.marsrover.domain.query
 import com.lastminute.axon.marsrover.domain.command.PlanetMap
 import com.lastminute.axon.marsrover.domain.coreapi.PlanetMapQuery
 import com.lastminute.axon.marsrover.domain.coreapi.PlanetMappedEvent
+import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import org.axonframework.eventhandling.EventHandler
 import org.springframework.stereotype.Component
 
@@ -16,5 +17,10 @@ class PlanetMapProjection {
         repo[planetMappedEvent.planetName] = planetMappedEvent.planetMap
     }
 
-    fun mapOf(planetName: String, q: PlanetMapQuery): PlanetMap = repo[planetName]?:throw IllegalArgumentException("planetNotFound!!!")
+//    @EventHandler
+//    fun on(planetMappedEvent: RoverMovedEvent) {
+//        repo[]
+//    }
+
+    fun mapOf(q: PlanetMapQuery): PlanetMap = repo[q.planet]?:throw IllegalArgumentException("planetNotFound!!!")
 }

@@ -17,7 +17,7 @@ class PlanetCartography {
 
     @CommandHandler
     constructor(command: ProbePlanetCommand, externalService: SatelliteSystem) {
-        AggregateLifecycle.apply(PlanetMappedEvent(command.planetName, PlanetMap(externalService.probe())))
+        AggregateLifecycle.apply(PlanetMappedEvent(command.planetName, PlanetMap(command.planetName, externalService.probe())))
     }
 
     @EventSourcingHandler

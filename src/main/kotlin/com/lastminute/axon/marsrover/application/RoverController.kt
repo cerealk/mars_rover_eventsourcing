@@ -28,7 +28,9 @@ class RoverController {
 
     @PostMapping("/{planetName}/{roverName}")
     fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName")rover: String){
-        commandGateway.send<Any>(DropRoverCommand(rover, Coordinates(1,1), N))
+        queryGateway.query(PlanetMapQuery(planet), PlanetMap::class.java).thenApply {
+            commandGateway.send<Any>(DropRoverCommand(rover, Coordinates(1, 1), N, it))
+        }
     }
 
 
