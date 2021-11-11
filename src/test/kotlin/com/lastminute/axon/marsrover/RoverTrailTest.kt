@@ -18,9 +18,9 @@ class RoverTrailTest {
     internal fun `a rover just landed has only one position`() {
         val roverTrailProjection = RoverTrailProjection()
 
-        roverTrailProjection.on(RoverLandedEvent("Mars", Coordinates(1,2), E))
+        roverTrailProjection.on(RoverLandedEvent("MarsRover", "Mars", Coordinates(1,2), E))
 
-        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Coordinates(1,2)))
+        roverTrailProjection.trailFor(TrailQuery("MarsRover")) shouldBe Trail("MarsRover", listOf(Coordinates(1,2)))
     }
 
 
@@ -28,11 +28,11 @@ class RoverTrailTest {
     internal fun `the trail tracks when a rover moves`() {
         val roverTrailProjection = RoverTrailProjection()
 
-        roverTrailProjection.on(RoverLandedEvent("Mars", Coordinates(1,2), E))
-        roverTrailProjection.on(RoverMovedEvent("Mars", Coordinates(2,2), F))
+        roverTrailProjection.on(RoverLandedEvent("MarsRover", "Mars", Coordinates(1,2), E))
+        roverTrailProjection.on(RoverMovedEvent("MarsRover", Coordinates(2,2), F))
 
 
-        roverTrailProjection.trailFor(TrailQuery("Mars")) shouldBe Trail("Mars", listOf(Coordinates(1,2), Coordinates(2,2)))
+        roverTrailProjection.trailFor(TrailQuery("MarsRover")) shouldBe Trail("MarsRover", listOf(Coordinates(1,2), Coordinates(2,2)))
     }
 }
 

@@ -26,7 +26,7 @@ class Rover {
     @CommandHandler
     constructor(command: DropRoverCommand) {
         val evt = if (command.planetMap.probe(command.position))
-            RoverLandedEvent(command.rover, command.position, command.orientation)
+            RoverLandedEvent(command.rover, command.planetMap.planetName, command.position, command.orientation)
         else
             RoverExplodedEvent(command.rover, command.position)
 
