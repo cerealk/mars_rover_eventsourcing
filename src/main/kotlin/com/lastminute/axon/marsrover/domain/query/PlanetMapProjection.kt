@@ -7,6 +7,7 @@ import com.lastminute.axon.marsrover.domain.coreapi.PlanetMappedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.RoverLandedEvent
 import com.lastminute.axon.marsrover.domain.coreapi.RoverMovedEvent
 import org.axonframework.eventhandling.EventHandler
+import org.axonframework.queryhandling.QueryHandler
 import org.springframework.stereotype.Component
 
 @Component
@@ -46,6 +47,7 @@ class PlanetMapProjection {
 
     }
 
+    @QueryHandler
     fun mapOf(q: PlanetMapQuery): PlanetMap {
 
         val obstacles = planetToObstacles[q.planet] ?: throw IllegalArgumentException("planetNotFound!!!")

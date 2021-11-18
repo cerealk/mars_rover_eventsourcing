@@ -18,10 +18,10 @@ fun main( vals :Array<String>) {
 
 @Configuration
 class Conf {
-    @Bean
-    fun eventStorageEngine(): EventStorageEngine? {
-        return InMemoryEventStorageEngine()
-    }
+//    @Bean
+//    fun eventStorageEngine(): EventStorageEngine? {
+//        return InMemoryEventStorageEngine()
+//    }
 
     @Bean
     fun satelliteSystem() = FakeSatelliteSystem()
