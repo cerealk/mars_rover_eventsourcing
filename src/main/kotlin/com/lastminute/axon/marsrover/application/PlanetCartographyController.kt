@@ -25,9 +25,9 @@ class PlanetCartographyController {
     lateinit var planetMapProjection:PlanetMapProjection
 
     @PostMapping("/planet/{planetName}")
-    fun flyOverNewPlanet(@PathVariable("planetName") planetName: String) {
-        commandGateway.sendAndWait<Any>(ProbePlanetCommand(planetName))
-    }
+    fun flyOverNewPlanet(@PathVariable("planetName") planetName: String) =
+        commandGateway.send<String>(ProbePlanetCommand(planetName))
+
 
     @GetMapping("/planet/{planetName}")
     fun getCartography(@PathVariable("planetName") planetName: String): PlanetMap =
