@@ -28,9 +28,9 @@ class RoverController {
     val commandParser = CommandParser()
 
     @PostMapping("/{planetName}/{roverName}")
-    fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName") rover: String) =
+    fun drop(@PathVariable("planetName") planet: String, @PathVariable("roverName") rover: String): CompletableFuture<CompletableFuture<String>> =
         queryGateway.query(PlanetMapQuery(planet), PlanetMap::class.java).thenApply {
-            commandGateway.send<Any>(DropRoverCommand(rover, Coordinates(1, 1), N, it))
+            commandGateway.send(DropRoverCommand(rover, Coordinates(1, 1), N, it))
         }
 
 
@@ -39,10 +39,10 @@ class RoverController {
         @PathVariable("planetName") planet: String,
         @PathVariable("roverName") rover: String,
         @PathVariable("moves") moves: String
-    ) = queryGateway.query(PlanetMapQuery(planet), PlanetMap::class.java)
+    ): CompletableFuture<CompletableFuture<Unit>> = queryGateway.query(PlanetMapQuery(planet), PlanetMap::class.java)
         .thenApply { planetMap ->
             val commands = commandParser.parseCommands(moves)
-            commandGateway.send<Any>(
+            commandGateway.send(
             FollowPathCommand(
                 rover,
                 commands,
@@ -50,5 +50,5 @@ class RoverController {
             )) }
 
     @GetMapping("/{planetName}/{roverName}/trail")
-    fun trailFor(@PathVariable("roverName") rover: String) = queryGateway.query(TrailQuery(rover), Trail::class.java)
+    fun trailFor(@PathVariable("roverName") rover: String): CompletableFuture<Trail> = queryGateway.query(TrailQuery(rover), Trail::class.java)
 }
